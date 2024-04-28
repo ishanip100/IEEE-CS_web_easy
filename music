@@ -1,0 +1,39 @@
+import React, { useState } from 'react';
+
+const App = () => {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+
+  const searchPlaylists = async () => {
+    try {
+      const response = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=playlist`, {
+        headers: {
+          Authorization: `Bearer ${BQD8bld0ZMjEjPbS_7XsdwF6rY4R6sCNUXjq3yFt1KgKqHz4J7xjXQgIzvNUU5nC-vdX8QjTt3mBuV5M2LIZF2sSgwziDOclW3lIdK6iI6EC7DxN6iUpf-7v7hOn8pgidL52g_My-2Rq6A-0ZH0Bjx-RY8Ll1CgRoHXc6g3L5K-A72b0mYnLhJlF3ce_x9tUxXU_pIY9DSgEj5gJc-EpWyRnR_XQ-DOPZXd6f56g9-fM_qKvPvEzF3
+}`
+        }
+      });
+      const data = await response.json();
+      setResults(data.playlists.items);
+    } catch (error) {
+      console.error('Error searching playlists:', error);
+    }
+  };
+
+  return (
+    <div>
+      <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
+      <button onClick={searchPlaylists}>Search</button>
+      <ul>
+        {results.map((playlist) => (
+          <li key={playlist.id}>
+            <img src={playlist.images[0].url} alt={playlist.name} />
+            <h3>{playlist.name}</h3>
+            <p>{playlist.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default App;
